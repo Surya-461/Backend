@@ -2,10 +2,12 @@ from fastapi import APIRouter
 from pydantic import BaseModel, Field
 import pandas as pd
 
+
 from app.model_loader import (
     revenue_model,
     sales_model,
-    customer_segmentation_model
+    customer_segmentation_model,
+    return_prediction_model
 )
 
 router = APIRouter()
@@ -73,6 +75,29 @@ def predict_customer_segment(data: CustomerData):
         "segment_number": int(predicted_cluster),
         "customer_type": cluster_label_map[predicted_cluster]
     }
+    
+    
+
+
+
+
+class ReturnInput(BaseModel):
+    Quantity: float
+    Price: float
+    Discount: float
+
+
+@router.post("/predict-return")
+def predict_return(data: ReturnInput):
+    input_data = [[
+        data.Quantity,
+        data.Price,
+        data.Discount
+    ]]
+
+    prediction = return_prediction_model.predict(input_data)
+
+    return {"prediction": int(prediction[0])}
 
 
 # Load KMeans Model

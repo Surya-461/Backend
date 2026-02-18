@@ -27,3 +27,6 @@ sales_model = load_pickle_model("sales_sarima.pkl")
 customer_segmentation_model = load_joblib_model(
     "customer_segmentation_pipeline.pkl"
 )
+
+# Load Return Prediction Model (XGBoost)
+return_prediction_model = load_joblib_model("xgboost_return_model.pkl")
