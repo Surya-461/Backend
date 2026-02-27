@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 import pandas as pd
-
+import os
 
 from app.model_loader import (
     revenue_model,
@@ -98,6 +98,13 @@ def predict_return(data: ReturnInput):
     prediction = return_prediction_model.predict(input_data)
 
     return {"prediction": int(prediction[0])}
+
+
+@router.get("/customers")
+def get_customers():
+    file_path = os.path.join("app", "data", "final_df.csv")
+    df = pd.read_csv(file_path)
+    return df.to_dict(orient="records")
 
 
 # Load KMeans Model
